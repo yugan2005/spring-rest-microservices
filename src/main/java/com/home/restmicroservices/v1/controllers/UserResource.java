@@ -6,9 +6,6 @@ import com.home.restmicroservices.v1.services.UserService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/users")
 public class UserResource {
   private final UserService userService;
 
@@ -36,11 +33,8 @@ public class UserResource {
   }
 
   @GetMapping(path = "/{id}")
-  public EntityModel<UserDto> user(@PathVariable int id) {
-    EntityModel<UserDto> entityModel = new EntityModel<>(userService.getById(id));
-    final Link allUsers =
-        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).allUsers()).withRel("allUsers");
-    return entityModel.add(allUsers);
+  public UserDto user(@PathVariable int id) {
+    return userService.getById(id);
   }
 
   @PostMapping(path = "")
